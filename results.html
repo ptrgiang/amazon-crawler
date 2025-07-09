@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Amazon Search Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-5">
+        <h1 class="text-center mb-4">Search Results</h1>
+        <div class="card shadow-lg p-4 mb-4">
+            <div class="card-body">
+                <div class="table-responsive" id="results-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="index.html" class="btn btn-primary btn-lg">Back to Search</a>
+            <button id="export-excel" class="btn btn-success btn-lg ml-2">Export to Excel</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productData = JSON.parse(localStorage.getItem('productData'));
+            const domain = localStorage.getItem('amazonDomain');
+            const resultsContainer = document.getElementById('results-container');
+
+            if (productData && productData.length > 0) {
+                const table = document.createElement('table');
+                table.className = 'table table-striped table-bordered';
+                
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                const headers = ['#', 'ASIN', 'Title', 'Rating', 'Number of Ratings', 'Sales Past Month', 'Price', 'Link'];
+                headers.forEach(headerText => {
+                    const th = document.createElement('th');
+                    th.textContent = headerText;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+                productData.forEach((product, index) => {
+                    const row = document.createElement('tr');
+                    
+                    const cellIndex = document.createElement('td');
+                    cellIndex.textContent = index + 1;
+                    row.appendChild(cellIndex);
+
+                    const cellAsin = document.createElement('td');
+                    cellAsin.textContent = product.ASIN;
+                    row.appendChild(cellAsin);
+
+                    const cellTitle = document.createElement('td');
+                    cellTitle.textContent = product.Title;
+                    row.appendChild(cellTitle);
+
+                    const cellRating = document.createElement('td');
+                    cellRating.textContent = product.Rating;
+                    row.appendChild(cellRating);
+
+                    const cellNumRatings = document.createElement('td');
+                    cellNumRatings.textContent = product['Number of Ratings'];
+                    row.appendChild(cellNumRatings);
+
+                    const cellSales = document.createElement('td');
+                    cellSales.textContent = product['Sales Past Month'];
+                    row.appendChild(cellSales);
+
+                    const cellPrice = document.createElement('td');
+                    cellPrice.textContent = product.Price;
+                    row.appendChild(cellPrice);
+
+                    const cellLink = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `https://www.amazon.${domain}/dp/${product.ASIN}`;
+                    link.textContent = 'View';
+                    link.target = '_blank';
+                    cellLink.appendChild(link);
+                    row.appendChild(cellLink);
+
+                    tbody.appendChild(row);
+                });
+                table.appendChild(tbody);
+                resultsContainer.appendChild(table);
+            } else {
+                resultsContainer.innerHTML = '<p class="text-center">No results found.</p>';
+            }
+
+            document.getElementById('export-excel').addEventListener('click', () => {
+                const exportData = productData.map((product, index) => ({
+                    '#': index + 1,
+                    'ASIN': product.ASIN,
+                    'Title': product.Title,
+                    'Rating': product.Rating,
+                    'Number of Ratings': product['Number of Ratings'],
+                    'Sales Past Month': product['Sales Past Month'],
+                    'Price': product.Price,
+                    'Link': `https://www.amazon.${domain}/dp/${product.ASIN}`
+                }));
+                const worksheet = XLSX.utils.json_to_sheet(exportData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+                XLSX.writeFile(workbook, "Amazon_Products.xlsx");
+            });
+        });
+    </script>
+</body>
+</html>

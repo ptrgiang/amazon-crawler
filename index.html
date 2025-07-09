@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Amazon Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .loader {
+            width: 60px;
+            aspect-ratio: 2;
+            --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
+            background: var(--_g) 0%   50%,
+                        var(--_g) 50%  50%,
+                        var(--_g) 100% 50%;
+            background-size: calc(100%/3) 50%;
+            animation: l3 1s infinite linear;
+        }
+        @keyframes l3 {
+            20%{background-position:0%   0%, 50%  50%,100%  50%}
+            40%{background-position:0% 100%, 50%   0%,100%  50%}
+            60%{background-position:0%  50%, 50% 100%,100%   0%}
+            80%{background-position:0%  50%, 50%  50%,100% 100%}
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow-lg p-4" style="width: 100%; max-width: 500px;">
+            <div class="card-body">
+                <h1 class="card-title text-center mb-4">Amazon Product Search</h1>
+                <form>
+                    <div class="form-group mb-3">
+                        <input type="text" name="search_term" class="form-control form-control-lg" placeholder="Enter search term" aria-label="Search term">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="domainSelect">Select Amazon Domain:</label>
+                        <select class="form-control form-control-lg" id="domainSelect" name="domain">
+                            <option value="com">Amazon.com (US)</option>
+                            <option value="ca">Amazon.ca (Canada)</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="includeSearchTermInTitle" name="include_search_term_in_title" value="true" checked>
+                        <label class="form-check-label" for="includeSearchTermInTitle">Include search term in title</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
+                </form>
+                <div class="d-flex justify-content-center mt-4">
+                    <div class="loader" style="display: none;"></div>
+                </div>
+                <div id="error-container" class="alert alert-danger mt-4" role="alert" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
