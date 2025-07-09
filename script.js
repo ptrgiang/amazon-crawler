@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const includeSearchTermInTitle = document.querySelector('input[name="include_search_term_in_title"]').checked;
 
         try {
-            const response = await fetch(`https://render-deploy-7qmw.onrender.com/search?q=${searchTerm}&domain=${domain}`);
+            const response = await fetch(`https://vercel-deploy-snowy-eight.vercel.app/search?q=${searchTerm}&domain=${domain}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
