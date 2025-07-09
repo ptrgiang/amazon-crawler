@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const includeSearchTermInTitle = document.querySelector('input[name="include_search_term_in_title"]').checked;
 
         try {
-            const response = await fetch(`http://192.168.0.161:5000/search?q=${searchTerm}&domain=${domain}`);
+            const response = await fetch(`https://render-deploy-7qmw.onrender.com/search?q=${searchTerm}&domain=${domain}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             loader.style.display = 'none';
             const errorDiv = document.getElementById('error-container');
-            errorDiv.textContent = `Error: ${error.message}`;
+            errorDiv.textContent = "Service not available. Try again!";
             errorDiv.style.display = 'block';
         }
     });
