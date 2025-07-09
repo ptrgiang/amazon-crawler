@@ -7,11 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        // Hide previous errors and show loader
-        errorContainer.style.display = 'none';
-        loader.style.display = 'block';
-
         const searchTerm = document.querySelector('input[name="search_term"]').value;
+        
+        // Hide previous errors
+        errorContainer.style.display = 'none';
+
+        if (!searchTerm.trim()) {
+            errorContainer.textContent = 'Please enter a search term.';
+            errorContainer.style.display = 'block';
+            return;
+        }
+        
+        // Show loader
+        loader.style.display = 'block';
         const domain = document.querySelector('select[name="domain"]').value;
         const includeSearchTermInTitle = document.querySelector('input[name="include_search_term_in_title"]').checked;
 
